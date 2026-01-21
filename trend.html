@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap">
+
+    <link rel="icon" href="/img/TMA-ico.svg" type="image/svg">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/trend.css">
+    
+    <script src="lib/d3.v7.min.js" defer></script>
+    <script src="lib/d3-scale-chromatic.v1.min.js" defer></script>
+    <script src="lib/topojson.v3.min.js" defer></script>
+    
+    <script src="js/utilities.js" defer></script>
+    <script src="js/trend-narrative.js" defer></script>
+    <script src="js/trend.js" defer></script>
+    
+    <title>Trends | The Mortality Atlas</title>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="project-title">
+                <img src="/img/TMA-ico.svg" width="50px" height="50px">
+                <img src="/img/WHO-ico.svg" width="50px" height="50px">
+                <span class="project-subtitle">Global Mortality Dashboard</span>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="map.html" class="nav-item">Map</a>
+                <a href="#" class="nav-item active">Trends</a>
+                <a href="data.html" class="nav-item">Data</a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="dashboard-container">
+        <main class="trend-visualization-area">
+            <div class="trend-container">
+                <!-- Header -->
+                <div class="trend-header">
+                    <h2 id="trend-title">Global Mortality Trends</h2>
+                    <div id="trend-subtitle" class="trend-subtitle">
+                        Click causes to toggle them on/off. Start with "All Causes" for an overview.
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="trend-controls">
+                    <div class="control-group">
+                        <label>Cause of Death</label>
+                        <div id="cause-toggles" class="toggle-buttons">
+                            <!-- Toggle buttons will be inserted here -->
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="trend-metric">Metric</label>
+                        <select id="trend-metric" class="styled-select">
+                            <option value="absolute">Absolute Deaths</option>
+                            <option value="relative">Deaths per 100k</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="trend-scale">Scale</label>
+                        <select id="trend-scale" class="styled-select">
+                            <option value="linear">Linear</option>
+                            <option value="log">Logarithmic</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Time period selector -->
+                <div class="time-period-selector">
+                    <label for="time-range">Time Period: <span id="time-value">1990-2019</span></label>
+                    <div class="range-slider">
+                        <input type="range" id="time-start" min="1990" max="2019" value="1990">
+                        <input type="range" id="time-end" min="1990" max="2019" value="2019">
+                    </div>
+                    <div class="year-labels">
+                        <span>1990</span>
+                        <span>2000</span>
+                        <span>2010</span>
+                        <span>2019</span>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="chart-container">
+                    <svg id="trend-chart"></svg>
+                    <div id="trend-tooltip" class="trend-tooltip"></div>
+                </div>
+                
+                <!-- Insights / Narrative -->
+                <div class="trend-insights">
+                    <div class="insight-card">
+                        <h3>Selected Trends</h3>
+                        <div id="trend-changes" class="insights-content"></div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3>Summary</h3>
+                        <div id="trend-comparison" class="insights-content"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <div class="footer-content">
+            <div class="data-sources">
+                <strong>Based on:</strong> GCDP 1990-2019 Global Causes of Death and Population
+                <br>
+                <strong>Sources:</strong> WHO Mortality Database, World Bank Population Data, Our World in Data
+            </div>
+            <div class="project-info">
+                &copy Nils Weigand, 2026
+                <br>
+                Infografía y Visualización | UOC
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

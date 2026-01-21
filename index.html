@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap">
+
+    <link rel="icon" href="/img/TMA-ico.svg" type="image/svg">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/map.css">
+
+    <script src="lib/d3.v7.min.js" defer></script>
+    <script src="lib/d3-scale-chromatic.v1.min.js" defer></script>
+    <script src="lib/topojson.v3.min.js" defer></script>
+    
+    <script src="js/utilities.js" defer></script>
+    <script src="js/trend-narrative.js" defer></script>
+    <script src="js/country-panel.js" defer></script>
+    <script src="js/map-builder.js" defer></script>
+    <script src="js/mini-globe.js" defer></script>
+
+    <title>Welcome | The Mortality Atlas</title>
+
+    <style>
+  body {
+    visibility: hidden;
+  }
+</style>
+</head>
+<body>
+    <!-- Place this at the top of your index.html body -->
+    <div id="disclaimer-overlay"
+     style="position:fixed;inset:0;background:rgba(0,0,0,0.85);color:white;
+            display:none;flex-direction:column;align-items:center;justify-content:center;
+            padding:20px;z-index:9999;font-family:sans-serif;text-align:center;">
+        <div style="max-width:600px;">
+            <h2>Disclaimer | Advertencia | Hinweis</h2>
+            <p>
+                This website is a fictional approximation of a data visualization and is in no way affiliated with any represented organizations.<br>
+                Its sole purpose is to present the final project for the course <em>Infography and Visualization</em> at the Universitat Oberta de Catalunya, created by Nils Weigand.<br>
+                All content as any logos, names, or brands are used purely for demonstration and educational purposes.<br><br>
+
+                Este sitio web es una aproximación ficticia de una visualización de datos y de ninguna manera está afiliado a ninguna organización representada.<br>
+                Su único propósito es presentar el proyecto final del curso <em>Infografía y Visualización</em> de la Universitat Oberta de Catalunya, realizado por Nils Weigand.<br>
+                Todo el contenido como cualquier logotipo, nombre o marca se utilizan únicamente con fines demostrativos y educativos.<br><br>
+
+                Diese Website ist eine fiktive Darstellung einer Datenvisualisierung und steht in keiner Verbindung zu den dargestellten Organisationen.<br>
+                Sie dient ausschließlich dazu, das Abschlussprojekt des Kurses <em>Infographie und Visualisierung</em> an der Universitat Oberta de Catalunya von Nils Weigand zu präsentieren.<br>
+                Alle Inhalte sowie Logos, Namen oder Marken werden nur zu Demonstrations- und Bildungszwecken verwendet.
+            </p>
+            <button id="accept-disclaimer" style="margin-top:20px;padding:10px 20px;background:#4a90e2;border:none;border-radius:5px;color:white;cursor:pointer;font-size:1em;">Accept | Aceptar | Akzeptieren</button>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.getElementById("disclaimer-overlay");
+    const btn = document.getElementById("accept-disclaimer");
+
+    if (!sessionStorage.getItem("disclaimerAccepted")) {
+        overlay.style.display = "flex";
+    }
+
+    // Now it’s safe to show the page
+    document.body.style.visibility = "visible";
+
+    btn.addEventListener("click", () => {
+        sessionStorage.setItem("disclaimerAccepted", "true");
+        overlay.style.display = "none";
+    });
+});
+</script>
+
+
+
+    <main class="landing">
+        <h1>The Mortality Atlas</h1>
+        <div class="subtitle">Exploring 30 Years of Death Around the Globe</div>
+
+        <section class="intro-hook">
+            <p class="hook-number">0.5 seconds.</p>
+
+            <p>
+                That is roughly the interval at which <strong>someone</strong> dies somewhere in the world.
+            </p>
+
+            <p>
+                That equals <strong>two deaths every second</strong>,<br>
+                over <strong>170,000 deaths each day</strong>,<br>
+                and nearly <strong>60 million deaths every year</strong>.
+            </p>
+
+            <p>
+                These numbers are not random.
+                They reflect patterns shaped by geography, time, and cause.
+            </p>
+
+            <p>
+                Some deaths decline as healthcare improves.
+                Others persist where resources never arrive.
+                Many are preventable.
+            </p>
+
+            <p>
+                What do people die from?
+                Where do mortality rates fall, and where do they remain high?
+                And most importantly:
+                <strong>where would intervention save the most lives?</strong>
+            </p>
+        </section>
+
+
+        <div class="hero-globe">
+            <div id="rotating-globe"></div>
+        </div>
+
+        <a href="map.html" class="btn">Explore the Data</a>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap">
+
+    <link rel="icon" href="/img/TMA-ico.svg" type="image/svg">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/map.css">
+    
+    <script src="lib/d3.v7.min.js" defer></script>
+    <script src="lib/d3-scale-chromatic.v1.min.js" defer></script>
+    <script src="lib/topojson.v3.min.js" defer></script>
+    
+    <script src="js/utilities.js" defer></script>
+    <script src="js/trend-narrative.js" defer></script>
+    <script src="js/country-panel.js" defer></script>
+    <script src="js/map-builder.js" defer></script>
+    
+    <title>Dashboard | The Mortality Atlas</title>
+</head>
+<body>
+    <!-- Header con navegación -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="project-title">
+                <img src="/img/TMA-ico.svg" width="50px" height="50px">
+                <img src="/img/WHO-ico.svg" width="50px" height="50px">
+                <span class="project-subtitle">Global Mortality Dashboard</span>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="#" class="nav-item active">Map</a>
+                <a href="trend.html" class="nav-item">Trends</a>
+                <a href="data.html" class="nav-item">Data</a>
+            </nav>
+        </div>
+        <!--
+        <div class="header-right">
+            <div class="year-display">
+                <span id="current-year">1990</span>
+            </div>
+            <a href="index.html" class="back-btn">← Back</a>
+        </div>-->
+    </header>
+    
+    <div class="dashboard-container">
+        <!-- Panel izquierdo: Controles -->
+        <!--
+        <aside class="control-panel">
+            <div class="panel-section">
+                <h3>📊 Filters</h3>
+                <div class="filter-group">
+                    <label for="year-range">Year: <span id="year-value">1990</span></label>
+                    <input type="range" id="year-range" min="1990" max="2019" value="1990" step="1">
+                    <div class="year-buttons">
+                        <button id="play-btn" class="play-btn">▶ Play</button>
+                        <button id="pause-btn" class="pause-btn">⏸ Pause</button>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="cause">Cause of Death</label>
+                    <select id="cause" class="styled-select"></select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="metric">Metric</label>
+                    <select id="metric" class="styled-select">
+                        <option value="absolute">Absolute Deaths</option>
+                        <option value="relative">Deaths per 100k</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3>📍 Selected Country</h3>
+                <div id="country-info" class="country-info">
+                    <p class="placeholder">Click on a country to see details</p>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3>ℹ️ Map Tips</h3>
+                <ul class="tips">
+                    <li>• <strong>Drag</strong> to pan around the map</li>
+                    <li>• <strong>Scroll</strong> to zoom in/out</li>
+                    <li>• <strong>Click</strong> on a country for details</li>
+                    <li>• Use the <strong>play button</strong> for animation</li>
+                </ul>
+            </div>
+        </aside>-->
+        
+        <!-- Área principal: Mapa y gráficos -->
+        <main class="visualization-area">
+            <!-- Mapa interactivo -->
+            <div class="map-container">
+                <div class="map-header">
+                    <h2 id="map-title">Global Mortality Map (1990)</h2>
+                    <div class="map-controls">
+                        <button id="reset-zoom" class="map-btn">↺ Reset View</button>
+                        <div class="legend-container">
+                            <span class="legend-label">Deaths:</span>
+                            <div id="color-legend"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-bar">
+    <div class="timeline-left">
+        <button id="play-btn" class="play-btn">▶ Play</button>
+        <button id="pause-btn" class="pause-btn">⏸ Pause</button>
+        <span id="year-value">1990</span>
+        <input type="range" id="year-range" min="1990" max="2019" value="1990">
+    </div>
+
+    <div class="timeline-right">
+        <select id="cause" class="styled-select"></select>
+        <select id="metric" class="styled-select">
+            <option value="absolute">Absolute Deaths</option>
+            <option value="relative">Deaths per 100k</option>
+        </select>
+        <div class="map-tips">
+            ℹ️ Drag / Scroll / Click / Play
+        </div>
+    </div>
+</div>
+
+                
+                <div id="map-wrapper">
+                    <svg id="map"></svg>
+                    <div id="tooltip" class="map-tooltip"></div>
+
+                    <div id="country-panel" class="country-panel hidden">
+                        <button class="close-btn">✕</button>
+
+                        <div class="country-header">
+                            <h2 id="country-name"></h2>
+                            <span id="country-iso"></span>
+                        </div>
+
+                        <div id="country-summary" class="country-summary"></div>
+
+                        <div class="country-viz">
+                            <div class="viz-block">
+                                <h3>Deaths by Cause</h3>
+                                <svg id="cause-bar-chart"></svg>
+                            </div>
+
+                            <div class="viz-block">
+                                <h3>Total Deaths Over Time</h3>
+                                <svg id="country-trend-chart"></svg>
+                                <div id="country-trend-summary"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-footer">
+                    <span class="data-info">Showing: <span id="data-count">0</span> countries with data</span>
+                </div>
+            </div>
+            
+
+            <!-- Gráficos secundarios -->
+             <!--
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Top 10 Countries</h3>
+                    <div id="top-chart" class="chart"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Trend Over Time</h3>
+                    <div id="trend-chart" class="chart"></div>
+                </div>
+            </div> -->
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <div class="footer-content">
+            <div class="data-sources">
+                <strong>Based on:</strong> GCDP 1990-2019 Global Causes of Death and Population
+                <br>
+                <strong>Sources:</strong> WHO Mortality Database, World Bank Population Data, Our World in Data
+            </div>
+            <div class="project-info">
+                &copy Nils Weigand, 2026
+                <br>
+                Infografía y Visualización | UOC
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
